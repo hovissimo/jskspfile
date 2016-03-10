@@ -1,0 +1,55 @@
+GAME
+{
+	version = 1.0.5
+	Title = sandbox (SANDBOX)
+	Description = No description available.
+	linkURL = 
+	linkCaption = 
+	Mode = SANDBOX
+	Status = 1
+	scene = 5
+	editor = None
+	flag = Squad/Flags/default
+	launchID = 40
+	SCENARIO
+	{
+		name = ScenarioDiscoverableObjects
+		scene = 7, 8, 5
+		lastSeed = 1892905511
+		sizeCurve
+		{
+			key = 0 0 1.5 1.5
+			key = 0.3 0.45 0.875 0.875
+			key = 0.7 0.55 0.875 0.875
+			key = 1 1 1.5 1.5
+		}
+	}
+	SCENARIO
+	{
+		name = ResourceScenario
+		scene = 5, 7, 6
+		RESOURCE_SETTINGS
+		{
+			GameSeed = 1357188582
+			MaxDeltaTime = 21600
+			BIOME_LOCK_DATA
+			{
+				PlanetId = 2
+				BiomeName = Polar Crater
+			}
+			BIOME_LOCK_DATA
+			{
+				PlanetId = 2
+				BiomeName = Northwest Crater
+			}
+			PLANET_SCAN_DATA
+			{
+				PlanetId = 2
+			}
+		}
+	}
+	MESSAGESYSTEM
+	{
+		flash = False
+	}
+}
