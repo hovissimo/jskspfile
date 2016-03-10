@@ -26,6 +26,17 @@ describe('yield_lines', () => {
 
 describe('KSPNode', () => {
    describe('constructor', () => {
+      it('ignores comments', () => {
+         const lines = [
+            '\tGAME //foo', 
+            '\t{ // this is the open brace, whee!',
+            '\tfoo = bar // so much bar',
+            '\tqux = quux',
+            '\t} // all done!',
+         ];
+         expect( () => new KSPNode(undefined, lines) ).to.not.throw(Error);
+      });
+
       it('should throw if a line is unmatched', () => {
          const lines = ['asdf bsdf csdf'];
          expect(() => {
@@ -66,5 +77,21 @@ describe('KSPNode', () => {
          expect( () => new KSPNode(undefined, lines) )
             .to.not.throw(Error);
       }); 
+   });
+});
+
+describe('strip_comments', () => {
+   it('should leave everything before \'\\s*//\' and remove the rest', () => {
+      const input = [
+         'here\'s a thing // and a comment',
+         ' oh look// another thing',
+         '\t34..  and something        // else',
+      ];
+      const expected = [
+         'here\'s a thing',
+         ' oh look',
+         '\t34..  and something',
+      ];
+      expect(input.map(strip_comments)).to.deep.equal(expected);
    });
 });

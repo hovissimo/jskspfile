@@ -4,7 +4,8 @@ export class KSPNode {
    constructor(name, lines) {
       // This recursive constructor eats lines from a generator
       this.name = name;
-      for (const line of lines) {
+      for (const rawline of lines) {
+         const line = strip_comments(rawline);
          let match;
          for (const [pattern, handler] of this.rules()) {
             match = pattern.exec(line);
