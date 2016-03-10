@@ -1,28 +1,15 @@
 import ExtendableError from 'es6-error';
 
-export class KSPDeserializer {
-   hello() {
-      return "World";
-   }
-}
-
-export function *yield_lines(string) {
-   yield* string.split('\n');
-}
-
-function read(lines) {
-}
-
 export class KSPNode {
    constructor(name, lines) {
       // This recursive constructor eats lines from a generator
       this.name = name;
-      for (var line of lines) {
+      for (const line of lines) {
          let match;
-         for (var [pattern, handler] of this.rules()) {
+         for (const [pattern, handler] of this.rules()) {
             match = pattern.exec(line);
             if (match) {
-               let status = handler(match);
+               const status = handler(match);
                if (status && status.done) { return; } // The handler has told us that we've finished constructing this node.
                break;
             }
@@ -52,14 +39,27 @@ export class KSPNode {
    }
 
    rules() {
+      const node_name_pattern = /^\t*([^\s{}]+)\s*$/;
+      const value_pair_pattern = /^\t*([^\s{}]+) = (.*?)\s*$/;
+      const open_brace_pattern = /^\t*{\s*$/;
+      const close_brace_pattern = /^\t*}\s*$/;
+      const empty_line_pattern = /^\s*$/;
       return [
-         [ /^\t*([^\s{}]+)\s*$/, this.handle_node_line ],
-         [ /^\t*([^\s{}]+) = (.*?)\s*$/, this.handle_value_pair_line ],
-         [ /^\t*{\s*$/, () => {} ], // open brace, no op
-         [ /^\s*$/, () => {} ], // empty line, no op
-         [ /^\t*}\s*$/, this.handle_close_brace ],
+         [ node_name_pattern, this.handle_node_line ],
+         [ value_pair_pattern, this.handle_value_pair_line ],
+         [ open_brace_pattern, () => {} ], // open brace, no op
+         [ close_brace_pattern, this.handle_close_brace ],
+         [ empty_line_pattern, () => {} ], // empty line, no op
       ];
    }
+}
+
+export function strip_comments(line) {
+   return line.replace(/(.*?)\s*\/\/.*$/, '$1');
+}
+
+export function *yield_lines(string) {
+   yield* string.split('\n');
 }
 
 export class UnrecognizedSyntaxError extends ExtendableError { }
