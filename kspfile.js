@@ -54,9 +54,10 @@ export class KSPNode {
    rules() {
       return [
          [ /^\t*([^\s{}]+)\s*$/, this.handle_node_line ],
-         [ /\t*([^\s{}]+) = (.*?)\s*$/, this.handle_value_pair_line ],
-         [ /\t*{\s*$/, () => {} ], // no op
-         [ /\t*}\s*$/, this.handle_close_brace ],
+         [ /^\t*([^\s{}]+) = (.*?)\s*$/, this.handle_value_pair_line ],
+         [ /^\t*{\s*$/, () => {} ], // open brace, no op
+         [ /^\s*$/, () => {} ], // empty line, no op
+         [ /^\t*}\s*$/, this.handle_close_brace ],
       ];
    }
 }

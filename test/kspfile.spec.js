@@ -68,6 +68,11 @@ describe('KSPNode', () => {
          let node = new KSPNode(undefined, lines);
          expect(node.handle_close_brace.callCount).to.be.equal(1);
       });
-      it('should call noop for an empty line'); 
+
+      it('should not throw for an empty line', () => {
+         const lines = ['', '}']; // we need the close brace for now, TODO
+         expect( () => { let node = new KSPNode(undefined, lines); })
+            .to.not.throw(Error);
+      }); 
    });
 });
